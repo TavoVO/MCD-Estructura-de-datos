@@ -1,0 +1,131 @@
+class Nodo:
+    def __init__(self, tarea):
+        self.tarea = tarea # dato del nodo en este caso la tarea
+        self.siguiente = None # referencia al siguiente nodo
+
+class Lista_enlazada:
+    def __init__(self):
+        self.cabeza = None # referencia al primer nodo de la lista
+
+    def agregar_tarea(self, tarea): # agrega una tarea al final de la lista
+        nuevo_nodo = Nodo(tarea)
+        if self.cabeza is None: # si la lista está vacía
+            self.cabeza = nuevo_nodo
+        else:
+            actual = self.cabeza
+            while actual.siguiente: # recorrer hasta el final de la lista
+                actual = actual.siguiente
+            actual.siguiente = nuevo_nodo
+
+    def agregar_tarea_inicio(self, tarea): # agrega una tarea al inicio de la lista
+        nuevo_nodo = Nodo(tarea)
+        nuevo_nodo.siguiente = self.cabeza
+        self.cabeza = nuevo_nodo
+
+    def contar_tareas(self): # cuenta el número de nodos en la lista
+        contador = 0
+        actual = self.cabeza
+        while actual:   # recorrer la lista
+            contador += 1
+            actual = actual.siguiente 
+        return contador
+
+    def buscar_tarea(self, tarea): # busca una tarea en la lista
+        actual = self.cabeza
+        while actual: # recorrer la lista
+            if actual.tarea == tarea:
+                return True
+            actual = actual.siguiente
+        return False
+    
+    def mostrar_tareas(self): # muestra todas las tareas en la lista
+        actual = self.cabeza
+        while actual: # recorrer la lista
+            print(actual.tarea)
+            actual = actual.siguiente
+
+    def eliminar_tarea(self, tarea): # elimina una tarea de la lista
+        actual = self.cabeza
+        previo = None
+        while actual: # recorrer la lista
+            if actual.tarea == tarea: # tarea encontrada
+                if previo:
+                    previo.siguiente = actual.siguiente
+                else:
+                    self.cabeza = actual.siguiente
+                return True
+            previo = actual
+            actual = actual.siguiente
+        return False
+    
+    def eliminar_ultima_tarea(self): # elimina la última tarea de la lista
+        if self.cabeza is None:
+            return False
+        if self.cabeza.siguiente is None:
+            self.cabeza = None
+            return True
+        actual = self.cabeza
+        previo = None
+        while actual.siguiente:
+            previo = actual
+            actual = actual.siguiente
+        previo.siguiente = None
+        return True
+    
+    def eliminar_primera_tarea(self): # elimina la primera tarea de la lista
+        if self.cabeza is None: # si la lista está vacía
+            return False
+        self.cabeza = self.cabeza.siguiente # mover la cabeza al siguiente nodo
+        return True
+    
+    
+    def agregar_tarea_poscion(self, tarea, posicion): # agrega una tarea en una posición específica
+        nuevo_nodo = Nodo(tarea)
+        if posicion == 0: # si la posición es 0, agregar al inicio
+            nuevo_nodo.siguiente = self.cabeza
+            self.cabeza = nuevo_nodo
+            return
+        actual = self.cabeza # nodo actual
+        previo = None
+        indice = 0
+        while actual and indice < posicion: # recorrer hasta la posición deseada
+            previo = actual
+            actual = actual.siguiente
+            indice += 1
+        previo.siguiente = nuevo_nodo # insertar el nuevo nodo
+        nuevo_nodo.siguiente = actual # enlazar el nuevo nodo con el siguiente
+
+
+# Instancia de la lista enlazada
+lista = Lista_enlazada()
+# Agregar tareas a la lista
+lista.agregar_tarea("Tarea 1")
+lista.agregar_tarea("Tarea 2")
+lista.agregar_tarea("Tarea 4")
+lista.agregar_tarea("Tarea 5")
+lista.agregar_tarea_inicio("Tarea 0")
+
+print("Número de nodos en la lista:", lista.contar_tareas())
+
+print("¿Existe 'Tarea 1'?:", lista.buscar_tarea("Tarea 1"))
+
+print("¿Existe 'Tarea 3'?:", lista.buscar_tarea("Tarea 3"))
+
+print("Nodos en la lista:")
+lista.mostrar_tareas()
+
+lista.eliminar_tarea("Tarea 1")
+print("Nodos en la lista después de eliminar 'Tarea 1':")
+lista.mostrar_tareas()
+
+lista.agregar_tarea_poscion("Tarea 3", 1)
+print("Nodos en la lista después de agregar 'Tarea 3' en la posición 1:")
+lista.mostrar_tareas()
+
+lista.eliminar_ultima_tarea()
+print("Nodos en la lista después de eliminar la última tarea:")
+lista.mostrar_tareas()
+
+lista.eliminar_primera_tarea()
+print("Nodos en la lista después de eliminar la primera tarea:")
+lista.mostrar_tareas()
